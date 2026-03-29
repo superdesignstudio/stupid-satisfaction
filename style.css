@@ -2,6 +2,25 @@
    STUPID SATISFACTION — CHAOTIC EXPERIMENTAL
    ============================================ */
 
+/* --- CUSTOM FONTS --- */
+@font-face {
+  font-family: 'Viltrum';
+  src: url('fonts/Viltrum.otf') format('opentype'),
+       url('fonts/Viltrum.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cook Conthic';
+  src: url('fonts/CookConthic.otf') format('opentype'),
+       url('fonts/CookConthic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- RESET & BASE --- */
 *, *::before, *::after {
   margin: 0;
@@ -99,7 +118,7 @@ a {
 }
 
 .hero-text-stupid {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
   font-size: clamp(6rem, 18vw, 16rem);
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -108,7 +127,7 @@ a {
 }
 
 .hero-text-satisfaction {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
   font-size: clamp(3rem, 9vw, 8.5rem);
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -691,7 +710,7 @@ a {
 }
 
 .footer-name {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
   font-size: 1.2rem;
   letter-spacing: 0.3em;
   font-weight: 400;
