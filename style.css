@@ -21,6 +21,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'LEDLIGHT';
+  src: url('fonts/LEDLIGHT.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- RESET & BASE --- */
 *, *::before, *::after {
   margin: 0;
@@ -97,179 +105,119 @@ a {
 }
 
 /* ============================================
-   HERO / LANDING
+   HERO / LANDING — BRUTALIST
    ============================================ */
 .hero {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: relative;
-  padding: 2rem;
-  overflow: hidden;
+  border-bottom: 1px solid rgba(240, 237, 230, 0.15);
 }
 
-.hero-text-block {
+.hero-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 150px;
+  min-height: 0;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.hero-sidebar {
+  border-right: 1px solid rgba(240, 237, 230, 0.1);
+  padding: 2rem 1.5rem;
   display: flex;
-  gap: 0;
-  line-height: 0.85;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.hero-sidebar-right {
+  border-right: none;
+  border-left: 1px solid rgba(240, 237, 230, 0.1);
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.hero-tag:hover {
+  opacity: 1;
+  color: var(--red);
+}
+
+.hero-coord, .hero-time {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  opacity: 0.25;
+}
+
+.hero-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.hero-title {
+  text-align: center;
   user-select: none;
 }
 
-.hero-text-stupid {
-  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
-  font-size: clamp(6rem, 18vw, 16rem);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  transform: rotate(-2deg) translateX(-3%);
-  color: var(--white);
+.hero-line {
+  display: block;
+  font-family: 'LEDLIGHT', var(--mono);
+  font-weight: normal;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  color: var(--red);
+  transition: color 0.2s, letter-spacing 0.4s, text-shadow 0.3s;
 }
 
-.hero-text-satisfaction {
-  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 9vw, 8.5rem);
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transform: rotate(1deg) translateX(5%);
-  margin-top: -1rem;
-  color: var(--white);
+.hero-line-1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+}
+
+.hero-line-2 {
+  font-size: clamp(1.5rem, 3.5vw, 3rem);
+  opacity: 0.5;
+  margin-top: 0.5rem;
 }
 
 .hero-letter {
   display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), color 0.2s;
   will-change: transform;
+  cursor: none;
 }
 
 .hero-letter:hover {
-  color: var(--red);
+  color: var(--white);
   transform: translateY(-10px) rotate(-5deg) scale(1.1) !important;
 }
 
-/* Subtitle tags */
-.hero-subtitle {
+.hero-bottom-bar {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  flex-wrap: wrap;
   justify-content: center;
-}
-
-.rotate-tag {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  border: 1px solid var(--white);
-  padding: 0.4rem 1rem;
-  transform: rotate(-3deg);
-  animation: tagFloat 4s ease-in-out infinite;
-}
-
-.rotate-tag.delayed {
-  transform: rotate(2deg);
-  animation-delay: 1.3s;
-}
-
-.rotate-tag.delayed-2 {
-  transform: rotate(-1deg);
-  animation-delay: 2.6s;
-}
-
-@keyframes tagFloat {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-6px) rotate(1deg); }
-}
-
-.rotate-tag.delayed { animation-name: tagFloat2; }
-@keyframes tagFloat2 {
-  0%, 100% { transform: translateY(0) rotate(2deg); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
-}
-
-.rotate-tag.delayed-2 { animation-name: tagFloat3; }
-@keyframes tagFloat3 {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50% { transform: translateY(-5px) rotate(3deg); }
-}
-
-/* Scroll hint */
-.hero-scroll-hint {
-  position: absolute;
-  bottom: 2rem;
-  display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.65rem;
+  gap: 2rem;
+  padding: 1rem;
+  border-top: 1px solid rgba(240, 237, 230, 0.1);
+  font-family: var(--mono);
+  font-size: 0.55rem;
   letter-spacing: 0.2em;
-  opacity: 0.5;
-  animation: scrollPulse 2s ease-in-out infinite;
-}
-
-.scroll-arrow {
-  font-size: 1.2rem;
-  animation: arrowBounce 1.5s ease-in-out infinite;
-}
-
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-@keyframes arrowBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
-}
-
-/* Floating stamps */
-.floating-stamp {
-  position: absolute;
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  border: 1px solid rgba(240, 237, 230, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
-  line-height: 1.2;
-}
-
-.stamp-1 {
-  width: 90px;
-  height: 90px;
-  top: 12%;
-  right: 10%;
-  transform: rotate(15deg);
-  animation: stampSpin 20s linear infinite;
-}
-
-.stamp-2 {
-  width: 80px;
-  height: 80px;
-  bottom: 20%;
-  left: 8%;
-  transform: rotate(-10deg);
-  animation: stampSpin 25s linear infinite reverse;
-}
-
-.stamp-3 {
-  width: 40px;
-  height: 40px;
-  top: 30%;
-  left: 15%;
-  font-size: 1.5rem;
-  border: none;
-  color: var(--red);
-  animation: stampSpin 8s linear infinite;
-}
-
-@keyframes stampSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  opacity: 0.4;
 }
 
 /* ============================================
@@ -278,6 +226,7 @@ a {
 .portfolio {
   padding: 6rem 2rem;
   position: relative;
+  overflow: hidden;
 }
 
 .section-label {
@@ -710,10 +659,11 @@ a {
 }
 
 .footer-name {
-  font-family: 'Cook Conthic', 'Bebas Neue', sans-serif;
+  font-family: 'LEDLIGHT', var(--mono);
   font-size: 1.2rem;
-  letter-spacing: 0.3em;
-  font-weight: 400;
+  letter-spacing: 0.15em;
+  font-weight: normal;
+  color: var(--red);
 }
 
 .footer-year {
@@ -811,14 +761,20 @@ a {
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-  .hero-text-stupid {
-    font-size: clamp(4rem, 20vw, 9rem);
-    transform: rotate(-2deg);
+  .hero-grid {
+    grid-template-columns: 1fr;
   }
 
-  .hero-text-satisfaction {
-    font-size: clamp(2rem, 10vw, 4.5rem);
-    transform: rotate(1deg);
+  .hero-sidebar {
+    display: none;
+  }
+
+  .hero-line-1 {
+    font-size: clamp(3rem, 16vw, 6rem);
+  }
+
+  .hero-line-2 {
+    font-size: clamp(1.2rem, 6vw, 2.5rem);
   }
 
   .project-showcase {
@@ -834,16 +790,6 @@ a {
   .about-content {
     grid-template-columns: 1fr;
     gap: 3rem;
-  }
-
-  .floating-stamp {
-    display: none;
-  }
-
-  .hero-subtitle {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
   }
 
   html, body, a {

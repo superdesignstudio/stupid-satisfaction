@@ -22,7 +22,7 @@ function animateCursor() {
 animateCursor();
 
 // Expand cursor on hoverable elements
-document.querySelectorAll('a, .person-card, .rotate-tag, .hero-letter').forEach(el => {
+document.querySelectorAll('a, .person-card, .hero-tag, .hero-letter, .gallery-thumb').forEach(el => {
   el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
   el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
 });
@@ -53,6 +53,47 @@ document.addEventListener('mousemove', (e) => {
   });
 });
 
+// --- Random glitch on letters ---
+const line1Letters = document.querySelectorAll('.hero-line-1 .hero-letter');
+const line2Letters = document.querySelectorAll('.hero-line-2 .hero-letter');
+
+function glitchRandomLetter() {
+  const allLetters = [...line1Letters, ...line2Letters];
+  const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
+  const original = randomLetter.style.color || '';
+
+  randomLetter.style.color = 'var(--white)';
+  randomLetter.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${(Math.random() - 0.5) * 6}px) skewX(${(Math.random() - 0.5) * 10}deg)`;
+
+  setTimeout(() => {
+    randomLetter.style.color = original;
+    randomLetter.style.transform = 'translate(0, 0) skewX(0deg)';
+  }, 120);
+}
+
+setInterval(glitchRandomLetter, 2500);
+
+// --- Hero: live coordinate display ---
+const heroCoord = document.getElementById('heroCoord');
+if (heroCoord) {
+  document.addEventListener('mousemove', (e) => {
+    const x = String(e.clientX).padStart(4, '0');
+    const y = String(e.clientY).padStart(4, '0');
+    heroCoord.textContent = `X:${x} Y:${y}`;
+  });
+}
+
+// --- Hero: live clock ---
+const heroTime = document.getElementById('heroTime');
+if (heroTime) {
+  function updateTime() {
+    const now = new Date();
+    heroTime.textContent = now.toLocaleTimeString('en-US', { hour12: false });
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+}
+
 // --- Scroll reveal ---
 const revealElements = [
   ...document.querySelectorAll('.section-label'),
@@ -82,54 +123,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .reveal-skew').forEach(el => observer.observe(el));
 
-// --- Parallax floating stamps on scroll ---
-const stamps = document.querySelectorAll('.floating-stamp');
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  stamps.forEach((stamp, i) => {
-    const speed = (i + 1) * 0.15;
-    stamp.style.transform = `rotate(${scrollY * speed}deg)`;
-  });
-});
-
-// --- Tilt effect on project image ---
-const imageContainer = document.querySelector('.project-image-container');
-if (imageContainer) {
-  imageContainer.addEventListener('mousemove', (e) => {
-    const rect = imageContainer.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    imageContainer.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
-  });
-  imageContainer.addEventListener('mouseleave', () => {
-    imageContainer.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
-    imageContainer.style.transition = 'transform 0.5s ease';
-  });
-  imageContainer.addEventListener('mouseenter', () => {
-    imageContainer.style.transition = 'none';
-  });
-}
-
-// --- Random glitch on studio name in hero (every few seconds) ---
-const stupidLetters = document.querySelectorAll('.hero-text-stupid .hero-letter');
-const satisfactionLetters = document.querySelectorAll('.hero-text-satisfaction .hero-letter');
-
-function glitchRandomLetter() {
-  const allLetters = [...stupidLetters, ...satisfactionLetters];
-  const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
-  const original = randomLetter.style.color || '';
-
-  randomLetter.style.color = 'var(--red)';
-  randomLetter.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${(Math.random() - 0.5) * 6}px) skewX(${(Math.random() - 0.5) * 10}deg)`;
-
-  setTimeout(() => {
-    randomLetter.style.color = original;
-    randomLetter.style.transform = 'translate(0, 0) skewX(0deg)';
-  }, 120);
-}
-
-setInterval(glitchRandomLetter, 2500);
-
 // --- Section label text rotation on scroll ---
 const sectionLabels = document.querySelectorAll('.label-text');
 window.addEventListener('scroll', () => {
@@ -155,9 +148,17 @@ if (moreComing) {
   });
 }
 
+// --- Footer scroll position ---
+const footerScroll = document.getElementById('footerScroll');
+if (footerScroll) {
+  window.addEventListener('scroll', () => {
+    footerScroll.textContent = `SCROLL_POS: ${Math.round(window.scrollY)}`;
+  });
+}
+
 // --- Easter egg: Konami code shows a flash ---
 let konamiProgress = 0;
-const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // up up down down left right left right B A
+const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
 document.addEventListener('keydown', (e) => {
   if (e.keyCode === konamiCode[konamiProgress]) {
     konamiProgress++;
@@ -194,8 +195,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // --- Image gallery ---
 const galleryImgs = document.querySelectorAll('.gallery-img');
-const galleryThumbs = document.querySelectorAll('.gallery-thumb');
-const galleryCounter = document.querySelector('.gallery-current');
+const galleryThumbs = document.querySelectorAll('.gallery-thumb, .gallery-btn');
+const galleryCounter = document.querySelector('.gallery-current') || document.querySelector('#galleryNum');
 
 if (galleryImgs.length && galleryThumbs.length) {
   let currentSlide = 0;
@@ -222,7 +223,7 @@ if (galleryImgs.length && galleryThumbs.length) {
   });
 
   // Click on main image to advance
-  const galleryMain = document.querySelector('.gallery-main');
+  const galleryMain = document.querySelector('.gallery-main') || document.querySelector('#galleryFrame');
   if (galleryMain) {
     galleryMain.addEventListener('click', () => {
       goToSlide((currentSlide + 1) % galleryImgs.length);
