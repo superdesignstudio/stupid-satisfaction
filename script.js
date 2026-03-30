@@ -53,25 +53,89 @@ document.addEventListener('mousemove', (e) => {
   });
 });
 
-// --- Random glitch on letters ---
+// --- Aggressive glitch system ---
 const line1Letters = document.querySelectorAll('.hero-line-1 .hero-letter');
 const line2Letters = document.querySelectorAll('.hero-line-2 .hero-letter');
+const allHeroLetters = [...line1Letters, ...line2Letters];
+const heroTitle = document.querySelector('.hero-title');
 
-function glitchRandomLetter() {
-  const allLetters = [...line1Letters, ...line2Letters];
-  const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
-  const original = randomLetter.style.color || '';
+// Single letter glitch — frequent
+function glitchSingleLetter() {
+  const letter = allHeroLetters[Math.floor(Math.random() * allHeroLetters.length)];
+  const originalColor = letter.style.color || '';
+  const originalFilter = letter.style.filter || '';
 
-  randomLetter.style.color = 'var(--white)';
-  randomLetter.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${(Math.random() - 0.5) * 6}px) skewX(${(Math.random() - 0.5) * 10}deg)`;
+  const effects = [
+    // Color flash white
+    () => { letter.style.color = 'var(--white)'; },
+    // Color flash blue (chromatic)
+    () => { letter.style.color = 'var(--blue)'; },
+    // Blur
+    () => { letter.style.filter = 'blur(2px)'; },
+    // Invert
+    () => { letter.style.filter = 'invert(1)'; },
+    // Opacity flicker
+    () => { letter.style.opacity = '0'; },
+  ];
+
+  const effect = effects[Math.floor(Math.random() * effects.length)];
+  letter.style.transform = `translate(${(Math.random() - 0.5) * 12}px, ${(Math.random() - 0.5) * 8}px) skewX(${(Math.random() - 0.5) * 20}deg)`;
+  effect();
 
   setTimeout(() => {
-    randomLetter.style.color = original;
-    randomLetter.style.transform = 'translate(0, 0) skewX(0deg)';
-  }, 120);
+    letter.style.color = originalColor;
+    letter.style.filter = originalFilter;
+    letter.style.opacity = '';
+    letter.style.transform = 'translate(0, 0) skewX(0deg)';
+  }, 80 + Math.random() * 80);
 }
 
-setInterval(glitchRandomLetter, 2500);
+// Burst glitch — hits 3-5 letters at once
+function glitchBurst() {
+  const count = 3 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => glitchSingleLetter(), i * 30);
+  }
+}
+
+// Full line shift — whole line jumps
+function glitchLineShift() {
+  const line = Math.random() > 0.5 ? document.querySelector('.hero-line-1') : document.querySelector('.hero-line-2');
+  const shiftX = (Math.random() - 0.5) * 20;
+  const skew = (Math.random() - 0.5) * 5;
+
+  line.style.transition = 'none';
+  line.style.transform = `translateX(${shiftX}px) skewX(${skew}deg)`;
+  line.style.textShadow = `${-shiftX * 0.3}px 0 var(--blue), ${shiftX * 0.3}px 0 var(--red)`;
+
+  setTimeout(() => {
+    line.style.transition = 'transform 0.15s, text-shadow 0.15s';
+    line.style.transform = '';
+    line.style.textShadow = '';
+  }, 60 + Math.random() * 60);
+}
+
+// Flicker — whole title blinks
+function glitchFlicker() {
+  heroTitle.style.opacity = '0.1';
+  setTimeout(() => { heroTitle.style.opacity = '1'; }, 40);
+  setTimeout(() => { heroTitle.style.opacity = '0.3'; }, 80);
+  setTimeout(() => { heroTitle.style.opacity = '1'; }, 120);
+}
+
+// Schedule glitches — spaced out so orange dominates
+setInterval(glitchSingleLetter, 3000);
+setInterval(glitchBurst, 8000);
+setInterval(glitchLineShift, 12000);
+setInterval(glitchFlicker, 20000);
+
+// Rare extra chaos
+setInterval(() => {
+  if (Math.random() > 0.8) {
+    glitchBurst();
+    glitchLineShift();
+  }
+}, 15000);
 
 // --- Hero: live coordinate display ---
 const heroCoord = document.getElementById('heroCoord');

@@ -167,6 +167,7 @@ a {
   padding: 2rem;
   overflow: hidden;
   min-width: 0;
+  position: relative;
 }
 
 .hero-title {
@@ -182,7 +183,24 @@ a {
   line-height: 1;
   letter-spacing: 0.05em;
   color: var(--red);
+  text-shadow: 0 0 10px rgba(230, 57, 38, 0.3), 0 0 40px rgba(230, 57, 38, 0.1);
   transition: color 0.2s, letter-spacing 0.4s, text-shadow 0.3s;
+}
+
+/* Scanline overlay on hero */
+.hero-center::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .hero-line-1 {
